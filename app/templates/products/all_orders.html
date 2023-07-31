@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <style>
+        .custom-button {
+            background-color: #ffffff; /* 背景色白色 */
+            color: #000000; /* 文字顏色黑色 */
+            border: 1px solid #969595; /* 外框黑色，設定寬度為2px */
+            padding: 6px 12px; /* 按鈕內文字與外框的距離 */
+            border-radius: 4px; /* 設定圓角 */
+            text-decoration: none; /* 去除超連結的底線 */
+            display: inline-block; /* 讓按鈕水平排列 */
+        }
+
+        .custom-button:hover {
+            background-color: #eeeeee; /* 鼠標懸停時背景色黑色 */
+            color: #070707; /* 鼠標懸停時文字顏色白色 */
+        }
+    </style>
+
+    <h1>訂單列表</h1>
+    {% for order in order_list %}
+        {% if not order.completed %}
+            <table style="border-collapse: collapse; width: 50%; margin-bottom: 20px;">
+                <tr style="border: 1px solid #ddd;">
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;" colspan="3">
+                        訂單編號: NO.{{ order.id }} (會員姓名: {{ order.user.username }})
+                    </th>
+                </tr>
+                <tr style="border: 1px solid #ddd;">
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">商品名稱</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">數量</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">總計</th>
+                </tr>
+                {% for item in order.order_items %}  {# 迭代訂單中的商品詳細內容 #}
+                    <tr style="border: 1px solid #ddd;">
+                        <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.product_name }}</td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.quantity }}</td>
+                        <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.total|int }}元</td>
+                    </tr>
+                {% endfor %}
+                <tr style="border: 1px solid #ddd;">
+                    <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">
+                        總價: {{ order.total|int }}元 
+                    </td>
+                    <td colspan="2" style="padding: 8px; text-align: right; border: 1px solid #ddd;">
+                        <form id="delete-form-{{ order.id }}" onsubmit="return deleteOrder(event, '{{ order.id }}')">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" class="custom-button" value="刪除訂單">
+                        </form>
+                        <form id="complete-form-{{ order.id }}" onsubmit="return completeOrder(event, '{{ order.id }}')">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="submit" class="custom-button" value="完成訂單">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    {% endfor %}
+
+
+    <script>
+        function deleteOrder(event, orderId) {
+            event.preventDefault();
+            const confirmDelete = confirm('確定要刪除該訂單嗎？');
+            if (confirmDelete) {
+                const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+                $.ajax({
+                    url: `/products/order/delete/${orderId}`,
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    success: function(response) {
+                        alert('訂單已成功刪除');
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        alert('刪除訂單時出現錯誤');
+                        console.log(error);
+                    }
+                });
+            }
+            return false; // 需要返回 false 以阻止表單提交
+        }
+
+        function completeOrder(event, orderId) {
+            event.preventDefault();
+            const confirmComplete = confirm('確定要完成該訂單嗎？');
+            if (confirmComplete) {
+                const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+                $.ajax({
+                    url: `/products/order/complete/${orderId}`,
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    success: function(response) {
+                        alert('訂單已完成');
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        alert('完成訂單時出現錯誤');
+                        console.log(error);
+                    }
+                });
+            }
+            return false; // 需要返回 false 以阻止表單提交
+        }
+    </script>
+{% endblock %}

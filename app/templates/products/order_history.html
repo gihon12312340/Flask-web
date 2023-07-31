@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>歷史訂單</h1>
+    {% for order in completed_orders %}
+    <table style="border-collapse: collapse; width: 50%; margin-bottom: 20px;">
+        <tr style="border: 1px solid #ddd;">
+            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;" colspan="3">訂單編號: NO.{{ order.id }} 
+                {% if current_user.is_admin %}
+                (會員姓名: {{ order.user.username }})</th>
+                {% endif %}
+        </tr>
+        <tr style="border: 1px solid #ddd;">
+            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">商品名稱</th>
+            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">數量</th>
+            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">總計</th>
+        </tr>
+        {% for item in order.order_items %}
+        <tr style="border: 1px solid #ddd;">
+            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.product_name }}</td>
+            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.quantity }}</td>
+            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ item.total|int }}元</td>
+        </tr>
+        {% endfor %}
+        <tr style="border: 1px solid #ddd;">
+            <td colspan="3" style="padding: 8px; text-align: left; border: 1px solid #ddd;">總價: {{ order.total|int }}元</td>
+        </tr>
+    </table>
+    {% endfor %}
+{% endblock %}

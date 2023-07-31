@@ -1,0 +1,12 @@
+flask
+flask-bootstrap
+flask-bcrypt
+flask-sqlalchemy
+flask-wtf
+flask-mail
+flask-login
+Flask-Migrate
+wtforms
+PyJWT
+flask-blueprint
+python-dotenv

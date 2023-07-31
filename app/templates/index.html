@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    {% if current_user.is_admin %}
+        <h1>Hello, 管理者 {{current_user.username}}</h1>
+    {% else %}
+        <h1>Hello, {{ current_user.username }}</h1>
+    {% endif %}
+        {% endblock %}

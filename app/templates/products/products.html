@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <style>
+        .custom-button {
+            background-color: #ffffff; /* 背景色白色 */
+            color: #000000; /* 文字顏色黑色 */
+            border: 1px solid #969595; /* 外框黑色，設定寬度為2px */
+            padding: 6px 12px; /* 按鈕內文字與外框的距離 */
+            border-radius: 4px; /* 設定圓角 */
+            text-decoration: none; /* 去除超連結的底線 */
+            display: inline-block; /* 讓按鈕水平排列 */
+        }
+
+        .custom-button:hover {
+            background-color: #eeeeee; /* 鼠標懸停時背景色黑色 */
+            color: #070707; /* 鼠標懸停時文字顏色白色 */
+        }
+    </style>
+
+    <h1>商品列表</h1>
+    <form action="{{ url_for('products.order_create') }}" method="post">
+        {{ form.csrf_token }}
+        <table style="border-collapse: collapse; width: 50%;">
+            <tr style="border: 1px solid #ddd;">
+                <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">商品名稱</th>
+                <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">價格</th>
+                <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">數量</th>
+            </tr>
+            {% for product in products_list %}
+            <tr style="border: 1px solid #ddd;">
+                <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ product.product_name }}</td>
+                <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">{{ product.product_price }}</td>
+                <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">
+                    <input type="number" name="quantities[]" value="0" min="0" step="1">
+                    <input type="hidden" name="product_ids[]" value="{{ product.id }}">
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3">
+                    <button type="submit" class="custom-button">加入購物車</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
