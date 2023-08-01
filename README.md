@@ -111,6 +111,10 @@ def place_order():
         flash('購物車內尚無商品', category='error')
         return redirect(url_for('products.products'))
 ```
+## __預期優化項目__  
+1.將資料庫更換為MySQL以符合實務上的需求  
+2.將資料庫優化,如函數名稱優化,設置索引及分頁  
+3.利用Redis處理需要快取的物件  
 
 ## __作者__  
 這個專案由本人開發，如果有任何問題或需求，請隨時聯絡我。
