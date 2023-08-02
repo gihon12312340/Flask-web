@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile-flask
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env  # 指定使用 .env 檔案中的環境變數
+    networks:
+      - my_network
+    depends_on:
+      - mysql_db
+    volumes:
+      - mysql_data:/var/lib/mysql  # 將 MySQL 數據持久化保存在卷中
+  mysql_db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: jerry12312341
+      MYSQL_DATABASE: app
+      TZ: Asia/Taipei  # 設置 MySQL 容器的時區為 "Asia/Taipei"，您可以根據所在時區進行調整
+    networks:
+      - my_network
+    volumes:
+      - mysql_data:/var/lib/mysql  # 將 MySQL 數據持久化保存在卷中
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local  # 定義名為 "mysql_data" 的本地卷
