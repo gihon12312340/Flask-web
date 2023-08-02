@@ -28,7 +28,7 @@ class User(db.Model, UserMixin):
             data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
             return User.query.filter_by(id=data['id']).first()
         except jwt.ExpiredSignatureError:
-            return None  #Token過期
+            return None  # Token過期
         except jwt.InvalidTokenError:
             return None  # 無效的Token
         
@@ -38,34 +38,29 @@ class ProductsList(db.Model):
     product_price = db.Column(db.String(20), nullable=False)
 
 
-class CarList(db.Model):
+class ShoppingCart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_name = db.Column(db.String(20), nullable=False)
+    product_name  = db.Column(db.String(20), nullable=False)
     product_price = db.Column(db.Integer, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False) 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    quantity      = db.Column(db.Integer, nullable=False) 
+    user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    user = db.relationship('User', backref='shoppingcart', lazy=True)
     
 class OrderList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_name = db.Column(db.String(20), nullable=False)  # 這裡是商品名稱，不是外鍵
-    product_price = db.Column(db.Integer, nullable=False)  # 價格
-    quantity = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    total = db.Column(db.Integer, nullable=False)
-    completed = db.Column(db.Boolean, default=False)
+    total         = db.Column(db.Integer, nullable=False)
+    completed     = db.Column(db.Boolean, default=False)
+    user_id       = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    user = db.relationship('User', backref=db.backref('orders_list', lazy=True))
-    order_items = db.relationship('OrderItem', backref='order', lazy=True)
+    user        = db.relationship('User', backref='orderslist', lazy=True)
+    order_items = db.relationship('OrderItem', backref='orderlist', lazy=True)
 
     
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_name = db.Column(db.String(100), nullable=False)
+    product_name  = db.Column(db.String(100), nullable=False)
     product_price = db.Column(db.Float, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    total = db.Column(db.Float, nullable=False)
-
-    # 外鍵關聯至 OrderList 表格的 id 欄位
-    order_id = db.Column(db.Integer, db.ForeignKey('order_list.id'), nullable=False)
+    quantity      = db.Column(db.Integer, nullable=False)
+    total         = db.Column(db.Float, nullable=False)
+    order_id      = db.Column(db.Integer, db.ForeignKey('order_list.id'), nullable=False)

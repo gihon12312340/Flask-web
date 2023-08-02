@@ -12,8 +12,6 @@ services:
       - my_network
     depends_on:
       - mysql_db
-    volumes:
-      - mysql_data:/var/lib/mysql  # 將 MySQL 數據持久化保存在卷中
   mysql_db:
     image: mysql:latest
     environment:
@@ -22,12 +20,10 @@ services:
       TZ: Asia/Taipei  # 設置 MySQL 容器的時區為 "Asia/Taipei"，您可以根據所在時區進行調整
     networks:
       - my_network
-    volumes:
-      - mysql_data:/var/lib/mysql  # 將 MySQL 數據持久化保存在卷中
 networks:
   my_network:
     driver: bridge
 
 volumes:
   mysql_data:
-    driver: local  # 定義名為 "mysql_data" 的本地卷
+

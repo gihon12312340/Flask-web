@@ -19,7 +19,7 @@
     </style>
 
     <h1>商品列表</h1>
-    <form action="{{ url_for('products.order_create') }}" method="post">
+    <form action="{{ url_for('products.add_to_cart') }}" method="post">
         {{ form.csrf_token }}
         <table style="border-collapse: collapse; width: 50%;">
             <tr style="border: 1px solid #ddd;">

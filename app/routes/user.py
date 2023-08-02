@@ -80,7 +80,7 @@ def reset_password(token):
         if user:
             user.password = bcrypt.generate_password_hash(form.password.data)
             db.session.commit()
-            flash('密碼已重置，現在已可以使用新密碼登入', category='info')
+            flash('密碼已重置，現在已可以使用新密碼登入', category='success')
             return redirect(url_for('user.login'))
         else:
             flash('重置密碼失敗，請檢查重置密碼的連結是否正確或已過期', category='error')

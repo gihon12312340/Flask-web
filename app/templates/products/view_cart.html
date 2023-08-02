@@ -39,5 +39,7 @@
         {% endfor %}
     </table>
     <p>總計：{{ session.total }}元</p>
-    <a href="{{ url_for('products.place_order') }}" class="custom-button">送出訂單</a>
-{% endblock %}
+    {% if car_list %}
+        <a href="{{ url_for('products.place_order') }}" class="custom-button">送出訂單</a>
+    {% endif %}
+    {% endblock %}
