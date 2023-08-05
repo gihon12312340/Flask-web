@@ -193,7 +193,7 @@ def complete_order(order_id):
         flash('權限不足', category='error')
         return redirect(url_for('products.products'))
 
-    order = OrderList.query.filter_by(order_id=order_id, completed=False)
+    order = OrderList.query.get(order_id)
 
     try:
         order.completed = True

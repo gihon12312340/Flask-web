@@ -10,3 +10,5 @@ wtforms
 PyJWT
 flask-blueprint
 python-dotenv
+uWSGI
+mysqlclient

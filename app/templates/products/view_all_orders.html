@@ -20,7 +20,7 @@
 
     <h1>訂單列表</h1>
     {% for order in order_list %}
-        {% if not order.completed %}
+        {% if order.completed == false %}
             <table style="border-collapse: collapse; width: 50%; margin-bottom: 20px;">
                 <tr style="border: 1px solid #ddd;">
                     <th style="padding: 8px; text-align: left; border: 1px solid #ddd;" colspan="3">
